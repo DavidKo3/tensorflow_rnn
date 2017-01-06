@@ -60,18 +60,19 @@ class TextLoader():
         self.tensor = self.tensor[:self.num_batches * self.batch_size * self.seq_length]
         xdata = self.tensor
         ydata = np.copy(self.tensor)
+        ydata[:-1] = xdata[1:]
+        ydata[-1] = xdata[0]
+        self.x_batches = np.split(xdata.resahpe(self.batch_size, -1), self.num_batches, 1)
+        self.y_batches = np.split(ydata.reshape(self.batch_size, -1), self.num_batches, 1)
         
         
-a= np.array([1,2,3,4,5])
-
-b= a[:3]
-
-c= a[2:]
-
-print (b)
-
-        
-        
+    def next_batch(self):
+        x, y = self.x_batches[self.pointer], self.y_batches[self.pointer]
+        self.pointer +=1
+        return x,y
+    
+    def reset_batch_pointer(self):    
+        self.pointer =0
         
         
         
